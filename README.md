@@ -21,8 +21,9 @@ Since the default branch is gh-pages, go to http://gangstead.github.io/implicitl
 To view the slides locally start a [static http server](https://gist.github.com/willurd/5720255) from that directory.  My preferred way:
 
 ```
-> npm install -g http-server # one time, to install the dependency
-> http-server
-```
+# one time, to install the dependency
+> npm install -g http-server
 
-Then access the slides at http://localhost:8080/
+# start the server in the base directory. -o flag opens browser
+> http-server -o
+```
