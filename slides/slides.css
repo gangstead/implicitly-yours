@@ -7,4 +7,26 @@ h1, h2, h3 {
   font-family: 'Yanone Kaffeesatz';
   font-weight: normal;
 }
+.remark-slide-content {
+  background: #272822;
+  color: #f3f3f3;
+  text-shadow: 0 0 20px #333;
+}
+.remark-code, .remark-inline-code {
+  font-family: 'Ubuntu Mono';
+  text-shadow: none;
+}
+
+a, a > code {
+  color: rgb(38, 105, 249);
+  text-decoration: none;
+}
+
+code {
+  -moz-border-radius: 5px;
+  -web-border-radius: 5px;
+  background: #e7e8e2;
+  border-radius: 5px;
+}
 .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+.remark-code-line-highlighted     { background-color: #373832; }
