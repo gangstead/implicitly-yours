@@ -2,15 +2,16 @@ class: center, middle
 
 # implicitly yours
 ### Steven Gangstead
-### code and slides at https://github.com/gangstead
+### code and slides at https://github.com/gangstead/implicitly-yours
 
 ---
 
-# Agenda
+# Overview
 
-1. Introduction
-2. Deep-dive
-3. ...
+- Implicit…
+- forms
+- types
+- conversions
 
 ---
 
