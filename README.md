@@ -22,5 +22,7 @@ To view the slides locally start a [static http server](https://gist.github.com/
 
 ```
 > npm install -g http-server # one time, to install the dependency
-> http-server -p 8000
+> http-server
 ```
+
+Then access the slides at http://localhost:8080/
