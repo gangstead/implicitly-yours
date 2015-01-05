@@ -3,7 +3,7 @@ implicitly-yours
 
 Sample Code for Dallas Scala Enthusiasts presentation
 
-[The Slides](https://docs.google.com/presentation/d/1jiTrjJlfqmUXCGycLYRG1yQzZUztHOnsnvtipo04OdI/edit?usp=sharing)
+[The Slides](https://gangstead.github.io/implictly-yours)
 
 ## Building IDE files
 ### Eclipse
