@@ -40,3 +40,7 @@ code {
   bottom: 1em;
   font-size: .5em;
 }
+
+.smaller {
+  font-size: .5em;
+}

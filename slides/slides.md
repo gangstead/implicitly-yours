@@ -21,7 +21,7 @@ Implicit…
 
 - Parameters to method calls that if not called explicitly the complier tries to fill them in automatically.
 - Name is ignored, match is based on type only
-- Exactly one match must be in scope ([see code](https://github.com/gangstead/implicitly-yours/blob/gh-pages/src/main/scala/ImplicitParams.scala))
+- Exactly one match must be in scope ([see code](https://github.com/gangstead/implicitly-yours/blob/gh-pages/src/main/scala/gangstead/ImplicitParams.scala))
 
 ---
 
@@ -46,9 +46,10 @@ import akka.util.Timeout
 import akka.pattern.ask
 implicit val timeout = Timeout(5 seconds)
 
-* val future = myActor.ask("hello")(timeout)
-
-* val future = myActor ? "hello"
+val future = myActor.ask("hello")(timeout)
+val future = myActor.ask("hello")
+val future = myActor ask "hello"
+val future = myActor ? "hello"
 ```
 ---
 # Implicit conversions
@@ -62,11 +63,27 @@ implicit val timeout = Timeout(5 seconds)
 # Implicit conversions continued
 
 Implicit Conversion
-    If one calls a method m on an object o of a class C, and that class does not support method m, then Scala will look for an implicit conversion from Cto something that does support m. A simple example would be the method map on String:
+    If one calls a method m on an object o of a class C, and that class does not support method m, then Scala will look for an implicit conversion from C to something that does support m. A simple example would be the method map on String:
 ```scala
 "abc".map(_.toInt)
 ```
+---
+# Basic Example
+```scala
+case class Enthusiast(level: Int)
 
+class HiConvert {
+  implicit def toEnthusiast(i : Int) = Enthusiast(i)
+  def takesAnEnthusiast(e : Enthusiast) = println(s"Received $e")
+
+  val randomHuman = 2 //an int
+  println("Enthusiasm level: " + randomHuman.level)
+  takesAnEnthusiast(randomHuman)
+}
+```
+
+---
+# Practical example:
 String does not support the method map, but StringOps does, and there’s an implicit conversion from String to StringOps available (see implicit def augmentString onPredef).
 
 We can make our own ScalaEnthusiastsStringOps...
@@ -102,6 +119,42 @@ Start here: http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#cont
 
 .footnote[[Source and Examples](http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#where-do-implicits-come-from)]
 
+---
+# Compiler considerations
+- Since they can get you in trouble Scala compiler wants you to be sure you actually want conversions.
+- It will work, but you'll see this warning:
+
+.smaller[
+```
+[warn] there was one feature warning; re-run with -feature for details
+```
+]
+
+- Add "-feature" to scalacOptions in build.sbt
+
+.smaller[
+```
+[warn] /Users/stevegangstead/workspace/scala/ws/implicitly-yours/src/main/scala/gangstead/ImplicitConversion.scala:9:
+  implicit conversion method toEnthusiast should be enabled
+[warn] by making the implicit value scala.language.implicitConversions visible.
+[warn] This can be achieved by adding the import clause 'import scala.language.implicitConversions'
+[warn] or by setting the compiler option -language:implicitConversions.
+[warn] See the Scala docs for value scala.language.implicitConversions for a discussion
+[warn] why the feature should be explicitly enabled.
+[warn]   implicit def toEnthusiast(i : Int) = Enthusiast(i)
+[warn]                ^
+```
+]
+---
+# Removing those warnings
+- In build.sbt enable project wide
+```
+scalacOptions += "-language:implicitConversions"
+```
+- Per file (or even per scope block)
+```scala
+import scala.language.implicitConversions
+```
 ---
 
 # The End

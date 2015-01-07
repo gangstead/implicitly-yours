@@ -2,7 +2,7 @@
 *.log
 
 # sbt specific
-.cache/
+.cache
 .history/
 .lib/
 dist/*
@@ -19,4 +19,6 @@ project/plugins/project/
 # Eclipse files
 .classpath
 .project
+.settings
 
+/bin/
