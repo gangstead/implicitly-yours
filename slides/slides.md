@@ -21,7 +21,7 @@ Implicit…
 
 - Parameters to method calls that if not called explicitly the complier tries to fill them in automatically.
 - Name is ignored, match is based on type only
-- Exactly one match must be in scope (see code)
+- Exactly one match must be in scope ([see code](https://github.com/gangstead/implicitly-yours/blob/gh-pages/src/main/scala/ImplicitParams.scala))
 
 ---
 
