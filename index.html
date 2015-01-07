@@ -9,6 +9,10 @@
   <script src="slides/remark-0.9.1.min.js">
   </script>
   <script>
+  remark.macros.scale = function (percentage) {
+    var url = this;
+    return '<img src="' + url + '" style="width: ' + percentage + '" />';
+  };
   var slideshow = remark.create({
     sourceUrl: 'slides/slides.md',
     ratio: '16:9', //default 4:3
