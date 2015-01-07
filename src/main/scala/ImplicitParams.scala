@@ -3,6 +3,8 @@
 object Hi {
 
   implicit val n: Int = 5
+  //implicit val no: Int = -1 //can only have one implicit type match!
+
   def add(x: Int)(implicit y: Int) = x + y
 
   def main(args: Array[String]) {
