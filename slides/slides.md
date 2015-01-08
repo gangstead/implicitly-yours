@@ -97,6 +97,9 @@ A simple example would be the method map on String:
 ```scala
 "abc".map(_.toInt)
 ```
+String does not support the method map, but StringOps does, and there’s an implicit conversion from String to StringOps available (see implicit def augmentString on Predef).
+
+.footnote[[Source](http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#implicits-defined-in-current-scope)]
 ---
 # Basic Example
 ```scala
@@ -150,8 +153,8 @@ We can make our own ScalaEnthusiastsStringOps...
 - Reduce boilerplate code by having a bunch of conversions to one base class (aka [Magnet Pattern](http://spray.io/blog/2012-12-13-the-magnet-pattern/))
 - `enhancement(thing)` becomes `thing.enhancement` (just preference?)
 ---
-#Implicit Classes Before
-~~Pimping~~ Bedazzling usually of the form
+# Implicit Classes
+~~Pimping~~ Bedazzling originally of the form
 ```scala
 class BetterThing(t: Thing){
   def enhancement = t + 1
@@ -166,7 +169,7 @@ val t = new Thing()
 val u = t.enhancement
 ```
 ---
-#Implicit Classes After
+# Implicit Classes After
 As of Scala 2.10 you have syntatic sugar:
 
 ```scala
@@ -181,8 +184,17 @@ import Helpers._
 val t = new Thing()
 val u = t.enhancement
 ```
-[Important Gotchas](http://docs.scala-lang.org/overviews/core/implicit-classes.html#restrictions)
+[Example](https://github.com/gangstead/implicitly-yours/blob/gh-pages/src/main/scala/gangstead/ImplicitClass.scala) in code.
+Some [Important Gotchas](http://docs.scala-lang.org/overviews/core/implicit-classes.html#restrictions)
 
+---
+
+# Bedazzling limitations
+- Cannot be ambiguous (nothing new here)
+- "Anyone can pimp" core primitives can change and break your code*
+- Requires explicit import that user might forget*
+
+.footnote[[*source](http://jsuereth.com/scala/2011/02/18/2011-implicits-without-tax.html)]
 ---
 
 # Implicit Context Bounds
