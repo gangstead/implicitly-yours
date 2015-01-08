@@ -4,7 +4,7 @@ class: center, middle
 ### Steven Gangstead
 ### code and slides at https://github.com/gangstead/implicitly-yours
 @Gangstead
-.footnote[.logo[![:scale 20%](slides/credera.jpg)]]
+.footnote[.round[![:scale 20%](slides/credera.jpg)]]
 ---
 
 # Overview
@@ -13,6 +13,7 @@ Implicit…
 - Parameters
 - Conversion
 - Classes
+- Implicitly
 - Context Bounds
 - Where do they come from?
 
@@ -30,7 +31,9 @@ Implicit…
 
 ```scala
 implicit val n: Int = 5
+
 def add(x: Int)(implicit y: Int) = x + y
+
 add(5) // takes n from the current scope
 add(5) (1) //can always call explicitly
 ```
@@ -52,8 +55,8 @@ println( add(5) )
 .smaller[
 ```
 [error] /implicitly-yours/src/main/scala/gangstead/ImplicitParams.scala:11: ambiguous implicit values:
-[error]  both value n in class HiParam of type => Int
-[error]  and value no in class HiParam of type => Int
+[error]  both value n in class ImplicitParams of type => Int
+[error]  and value no in class ImplicitParams of type => Int
 [error]  match expected type Int
 [error]     println( add(5) )
 [error]                 ^
@@ -105,7 +108,7 @@ String does not support the method map, but StringOps does, and there’s an imp
 ```scala
 case class Enthusiast(level: Int)
 
-class HiConvert {
+class ImplicitConversionUseCase {
   implicit def toEnthusiast(i : Int) = Enthusiast(i)
   def takesAnEnthusiast(e : Enthusiast) = s"Received $e"
 
@@ -135,15 +138,6 @@ implicit def toVeryEnthusiast(i : Int) = Enthusiast(i*10)
 [error]                     ^
 ```
 ]
-
----
-# Practical example:
-String does not support the method map, but StringOps does, and there’s an implicit conversion from String to StringOps available (see implicit def augmentString onPredef).
-
-We can make our own ScalaEnthusiastsStringOps...
-
----
-# Example: ScalaEnthusiastsStringOps
 
 ---
 
@@ -188,6 +182,15 @@ val u = t.enhancement
 Some [Important Gotchas](http://docs.scala-lang.org/overviews/core/implicit-classes.html#restrictions)
 
 ---
+# Practical example:
+- In the Coursera Scala course [Principles of Reactive Programming](https://www.coursera.org/course/reactive), week 3.
+- We learn how to add useful extensions to Futures via an implicit class FutureCompanionOps to add to the core Futures library
+- Example function: future that completes with the value of the first completed future from a list of futures.  Future.
+
+
+.footnote[Code not included in case they run the course again]
+
+---
 
 # Bedazzling limitations
 - Cannot be ambiguous (nothing new here)
@@ -195,12 +198,45 @@ Some [Important Gotchas](http://docs.scala-lang.org/overviews/core/implicit-clas
 - Requires explicit import that user might forget*
 
 .footnote[[*source](http://jsuereth.com/scala/2011/02/18/2011-implicits-without-tax.html)]
+
+---
+# Implicitly
+- Want to grab an implicit value that's in scope?
+- `implicitly[T]` says "give me the implicit T that is in scope"
+
+```scala
+def add(x: Int)(implicit y: Int) = x + y
+```
+```scala
+def add(x: Int) = {
+  x + implicitly[Int]
+}
+```
+Useful when someone else is going to be putting an implicit in scope.
+.footnote[[More reading](http://www.drmaciver.com/2008/03/an-introduction-to-implicit-arguments/)]
 ---
 
 # Implicit Context Bounds
+*type class pattern* * "For some type A, there is an implicit value of type B[A] available". B is a parameterized [type class](http://danielwestheide.com/blog/2013/02/06/the-neophytes-guide-to-scala-part-12-type-classes.html)
+```scala
+def g[A : B](a: A) = h(a)
+//desugars into
+def g[A](a: A)(implicit ev: B[A]) = h(a)
+```
 
-Start here: http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#context-bounds
-I think this is about `implicitly` views, might need to rename this section.
+Example from Scala Numeric:
+```scala
+def f[A : Ordering](a: A, b: A) =
+  if (implicitly[Ordering[A]].lt(a, b)) a else b
+```
+
+.footnote[[Source](http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html#what-are-context-bounds-used-for) *as in Haskell's type classes]
+---
+# Context Bounds further reading
+## Because I'm not smart enough to explain it myself
+- http://docs.scala-lang.org/tutorials/FAQ/context-and-view-bounds.html
+- http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#context-bounds
+- http://stackoverflow.com/a/2983376/1637003
 
 ---
 
@@ -248,7 +284,7 @@ I think this is about `implicitly` views, might need to rename this section.
 ---
 # Removing those warnings
 - Two Options:
-1. In build.sbt enable project wide
+1. Project wide, in build.sbt
 ```
 scalacOptions += "-language:implicitConversions"
 ```

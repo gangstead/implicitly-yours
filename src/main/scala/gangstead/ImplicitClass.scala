@@ -18,13 +18,13 @@ object Helper2 {
   }
 }
 
-class ImplicitClassUseCase {
+object ImplicitClassUseCase extends App{
   import Helper1._
   import Helper2._
 
   val scalaHuman = Admirer(11)
 
-  println("Esteem: " + scalaHuman.esteem)
+  println("Esteem:  " + scalaHuman.esteem)
   println("Boosted: " + scalaHuman.boosted)
-  println("Bested:" + scalaHuman.bested)
+  println("Bested:  " + scalaHuman.bested)
 }

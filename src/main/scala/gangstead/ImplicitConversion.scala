@@ -4,7 +4,7 @@ package gangstead
 
 case class Enthusiast(level: Int)
 
-class ImplicitConversionUseCase {
+object ImplicitConversionUseCase extends App {
 
   implicit def toEnthusiast(i : Int) = Enthusiast(i)
   //implicit def toVeryEnthusiast(i : Int) = Enthusiast(i*10) //this would be ambiguous
@@ -19,4 +19,7 @@ class ImplicitConversionUseCase {
 
   println(takesAnEnthusiast(scalaHuman))
   println(takesAnEnthusiast(randomHuman))
+  
+  implicit def enthusiasToInt(e : Enthusiast) = e.level
+  println( "Combined: " + (1 + scalaHuman))
 }

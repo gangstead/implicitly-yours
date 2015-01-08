@@ -5,7 +5,7 @@ import akka.actor.Actor
 class actorA extends Actor {
 	def receive = {
 		case Request =>
-			Thread.sleep(1000)
+			Thread.sleep(300)
 			println("actorA responds")
 			sender ! 1
 	}
@@ -14,7 +14,7 @@ class actorA extends Actor {
 class actorB extends Actor {
 	def receive = {
 		case Request =>
-			Thread.sleep(2000)
+			Thread.sleep(600)
 			println("actorB responds")
 			sender ! "b"
 	}
@@ -23,7 +23,7 @@ class actorB extends Actor {
 class actorC extends Actor {
 	def receive = {
 		case Request =>
-			Thread.sleep(3000)
+			Thread.sleep(900)
 			println("actorC responds")
 			sender ! 3.0
 	}

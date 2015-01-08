@@ -1,6 +1,6 @@
 package gangstead
 
-class HiParam {
+object ImplicitParams {
 
   implicit val n: Int = 5
   //implicit val no: Int = -1 //can only have one implicit type match!
