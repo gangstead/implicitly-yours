@@ -5,7 +5,7 @@ version := "1.0"
 scalaVersion := "2.11.4"
 
 scalacOptions := Seq(
-  "-unchecked",
+  "-unchecked"
   ,"-deprecation"
   ,"-encoding","utf8"
   ,"-feature"
