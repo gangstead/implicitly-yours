@@ -4,7 +4,7 @@ class: center, middle
 ### Steven Gangstead
 ### code and slides at https://github.com/gangstead/implicitly-yours
 @Gangstead
-.footnote[![:scale 20%](slides/credera.jpg)]
+.footnote[.logo[![:scale 20%](slides/credera.jpg)]]
 ---
 
 # Overview
@@ -200,6 +200,7 @@ Some [Important Gotchas](http://docs.scala-lang.org/overviews/core/implicit-clas
 # Implicit Context Bounds
 
 Start here: http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#context-bounds
+I think this is about `implicitly` views, might need to rename this section.
 
 ---
 

@@ -30,6 +30,11 @@ code {
   background: #000;
   border-radius: 5px;
 }
+.logo img{
+  -moz-border-radius: 10px;
+  -web-border-radius: 10px;
+  border-radius: 10px;
+}
 .remark-code, .remark-inline-code {
   font-family: 'Ubuntu Mono';
   font-size: 1em;
