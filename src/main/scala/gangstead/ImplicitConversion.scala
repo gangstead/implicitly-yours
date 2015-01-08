@@ -4,19 +4,19 @@ package gangstead
 
 case class Enthusiast(level: Int)
 
-class HiConvert {
+class ImplicitConversionUseCase {
 
   implicit def toEnthusiast(i : Int) = Enthusiast(i)
-  def takesAnEnthusiast(e : Enthusiast) = println(s"Received $e")
-  
+  //implicit def toVeryEnthusiast(i : Int) = Enthusiast(i*10) //this would be ambiguous
+
+  def takesAnEnthusiast(e : Enthusiast) = s"Received $e"
+
   val scalaHuman = Enthusiast(11)
   val randomHuman = 2 //an int
-  
+
   println("Enthusiasm level: " + scalaHuman.level)
   println("Enthusiasm level: " + randomHuman.level)
-  
-  takesAnEnthusiast(scalaHuman)
-  takesAnEnthusiast(randomHuman)
+
+  println(takesAnEnthusiast(scalaHuman))
+  println(takesAnEnthusiast(randomHuman))
 }
-
-

@@ -12,6 +12,7 @@ h1, h2, h3 {
   color: #f3f3f3;
   text-shadow: 0 0 20px #333;
   font-size: 2em;
+  padding: 1em 3em 1em 3em;
 }
 .remark-code, .remark-inline-code {
   font-family: 'Ubuntu Mono';
@@ -26,12 +27,15 @@ a, a > code {
 code {
   -moz-border-radius: 5px;
   -web-border-radius: 5px;
-  background: #e7e8e2;
+  background: #000;
   border-radius: 5px;
 }
 .remark-code, .remark-inline-code {
   font-family: 'Ubuntu Mono';
   font-size: 1em;
+}
+.remark-inline-code {
+  padding: .2em;
 }
 .remark-code-line-highlighted     { background-color: #373832; }
 

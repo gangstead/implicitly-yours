@@ -12,6 +12,7 @@ class: center, middle
 Implicit…
 - Parameters
 - Conversion
+- Classes
 - Context Bounds
 - Where do they come from?
 
@@ -35,10 +36,36 @@ add(5) (1) //can always call explicitly
 ```
 ---
 
+# implicit parameter limitations
+
+- Cannot be ambiguous
+
+```scala
+implicit val n: Int = 5
+implicit val no: Int = -1
+
+def add(x: Int)(implicit y: Int) = x + y
+
+println( add(5) )
+```
+
+.smaller[
+```
+[error] /implicitly-yours/src/main/scala/gangstead/ImplicitParams.scala:11: ambiguous implicit values:
+[error]  both value n in class HiParam of type => Int
+[error]  and value no in class HiParam of type => Int
+[error]  match expected type Int
+[error]     println( add(5) )
+[error]                 ^
+```
+]
+
+---
 # Why Implicit parameters?
 
 - Cleaner code
 - Focus on what the code does
+- Makes library code easier to use
 
 ```scala
 import scala.concurrent.duration._
@@ -46,8 +73,8 @@ import akka.util.Timeout
 import akka.pattern.ask
 implicit val timeout = Timeout(5 seconds)
 
-val future = myActor.ask("hello")(timeout)
-val future = myActor.ask("hello")
+*val future = myActor.ask("hello")(timeout)
+*val future = myActor.ask("hello")
 val future = myActor ask "hello"
 val future = myActor ? "hello"
 ```
@@ -55,15 +82,18 @@ val future = myActor ? "hello"
 # Implicit conversions
 
 - Call a method that a type doesn't have.  Compiler checks for an implicit conversion to a type that does have the method.
-- Limitations ???
-- Formerly called Pimp pattern / pimplicits.  For "pimp my library"
+- Conversion = method that takes the one parameter of type A and returns a type B. Parameter names don't matter
+- [Formerly](https://twitter.com/coda/status/93003343965851648) called Pimp pattern / pimplicits.  For "pimp my library"
 - As of [PNW Scala](http://www.pnwscala.org) 2014 libraries are now "bedazzled" instead.
 
 ---
+
 # Implicit conversions continued
 
-Implicit Conversion
-    If one calls a method m on an object o of a class C, and that class does not support method m, then Scala will look for an implicit conversion from C to something that does support m. A simple example would be the method map on String:
+If one calls a method m on an object o of a class C, and that class does not support method m, then Scala will look for an implicit conversion from C to something that does support m.
+
+A simple example would be the method map on String:
+
 ```scala
 "abc".map(_.toInt)
 ```
@@ -74,13 +104,34 @@ case class Enthusiast(level: Int)
 
 class HiConvert {
   implicit def toEnthusiast(i : Int) = Enthusiast(i)
-  def takesAnEnthusiast(e : Enthusiast) = println(s"Received $e")
+  def takesAnEnthusiast(e : Enthusiast) = s"Received $e"
 
   val randomHuman = 2 //an int
   println("Enthusiasm level: " + randomHuman.level)
-  takesAnEnthusiast(randomHuman)
+  println(takesAnEnthusiast(randomHuman))
 }
 ```
+---
+# Implicit conversion limitations
+
+- Can only have one matching implicit in scope
+```scala
+implicit def toEnthusiast(i : Int) = Enthusiast(i)
+implicit def toVeryEnthusiast(i : Int) = Enthusiast(i*10)
+```
+.smaller[
+```
+[error] /implicitly-yours/src/main/scala/gangstead/ImplicitConversion.scala:20: type mismatch;
+[error]  found   : Int
+[error]  required: gangstead.Enthusiast
+[error] Note that implicit conversions are not applicable because they are ambiguous:
+[error]  both method toEnthusiast in class HiConvert of type (i: Int)gangstead.Enthusiast
+[error]  and method toVeryEnthusiast in class HiConvert of type (i: Int)gangstead.Enthusiast
+[error]  are possible conversion functions from Int to gangstead.Enthusiast
+[error]   takesAnEnthusiast(randomHuman)
+[error]                     ^
+```
+]
 
 ---
 # Practical example:
@@ -96,6 +147,42 @@ We can make our own ScalaEnthusiastsStringOps...
 # Why Implicit Conversions?
 
 - Extend classes that you can't otherwise modify
+- Reduce boilerplate code by having a bunch of conversions to one base class (aka [Magnet Pattern](http://spray.io/blog/2012-12-13-the-magnet-pattern/))
+- `enhancement(thing)` becomes `thing.enhancement` (just preference?)
+---
+#Implicit Classes Before
+~~Pimping~~ Bedazzling usually of the form
+```scala
+class BetterThing(t: Thing){
+  def enhancement = t + 1
+}
+object Helpers{
+  implicit def betterMake(t: Thing) = new BetterThing(t)
+}
+```
+```scala
+import Helpers._
+val t = new Thing()
+val u = t.enhancement
+```
+---
+#Implicit Classes After
+As of Scala 2.10 you have syntatic sugar:
+
+```scala
+object Helpers {
+  implicit class BetterThing(t : Thing){
+    def enhancement = t + 1
+  }
+}
+```
+```scala
+import Helpers._
+val t = new Thing()
+val u = t.enhancement
+```
+[Important Gotchas](http://docs.scala-lang.org/overviews/core/implicit-classes.html#restrictions)
+
 ---
 
 # Implicit Context Bounds
@@ -134,7 +221,7 @@ Start here: http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#cont
 
 .smaller[
 ```
-[warn] /Users/stevegangstead/workspace/scala/ws/implicitly-yours/src/main/scala/gangstead/ImplicitConversion.scala:9:
+[warn] /implicitly-yours/src/main/scala/gangstead/ImplicitConversion.scala:9:
   implicit conversion method toEnthusiast should be enabled
 [warn] by making the implicit value scala.language.implicitConversions visible.
 [warn] This can be achieved by adding the import clause 'import scala.language.implicitConversions'
@@ -147,11 +234,12 @@ Start here: http://docs.scala-lang.org/tutorials/FAQ/finding-implicits.html#cont
 ]
 ---
 # Removing those warnings
-- In build.sbt enable project wide
+- Two Options:
+1. In build.sbt enable project wide
 ```
 scalacOptions += "-language:implicitConversions"
 ```
-- Per file (or even per scope block)
+1. Per file (or even per scope block)
 ```scala
 import scala.language.implicitConversions
 ```

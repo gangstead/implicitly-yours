@@ -31,7 +31,11 @@ object main extends App {
 		} yield Result(x, s, d)
     
     //other valid forms
-    actorC.ask(Request)
+    //actorRef does not contain an ask method: https://github.com/akka/akka/blob/master/akka-actor/src/main/scala/akka/actor/ActorRef.scala
+    ask(actorC,Request)(timeout) 
+    ask(actorC,Request)
+    actorC.ask(Request) //actorRef is Bedazzled with ask pattern
+    //https://github.com/akka/akka/blob/master/akka-actor/src/main/scala/akka/pattern/AskSupport.scala#L46
     actorC.ask(Request)(timeout)
     actorC.ask(Request)(5 seconds) //implicit conversion to Timeout
     //https://github.com/akka/akka/blob/master/akka-actor/src/main/scala/akka/util/Timeout.scala#L37
