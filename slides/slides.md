@@ -2,7 +2,8 @@ class: center, middle
 
 # implicitly yours
 ### Steven Gangstead
-### code and slides at https://github.com/gangstead/implicitly-yours
+### slides https://gangstead.github.io/implicitly-yours
+### code https://github.com/gangstead/implicitly-yours
 @Gangstead
 .footnote[.round[![:scale 20%](slides/credera.jpg)]]
 ---
@@ -145,7 +146,7 @@ implicit def toVeryEnthusiast(i : Int) = Enthusiast(i*10)
 
 - Extend classes that you can't otherwise modify
 - Reduce boilerplate code by having a bunch of conversions to one base class (aka [Magnet Pattern](http://spray.io/blog/2012-12-13-the-magnet-pattern/))
-- `enhancement(thing)` becomes `thing.enhancement` (just preference?)
+- `enhancement(thing)` becomes `thing.enhancement` (better encapsulation)
 ---
 # Implicit Classes
 ~~Pimping~~ Bedazzling originally of the form
